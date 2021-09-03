@@ -2,6 +2,7 @@ package com.example.taskmaster;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,12 +24,16 @@ public class MainActivity extends AppCompatActivity {
 //        TextView textView = (TextView) findViewById(R.id.textView5);
 //        textView.setText(task.toString());
         // Create some data
-        ArrayList<Task> allTasks = new ArrayList<Task>();
-        allTasks.add(new Task("task 1","do the lab","new"));
-        allTasks.add(new Task("task 2","finish the reading","assigned"));
-        allTasks.add(new Task("task 3","hanging out ","in progress"));
-        allTasks.add(new Task("task 4","Play video games","in progress"));
-        allTasks.add(new Task("task 5","do some resubmissions","complete"));
+//        ArrayList<Task> allTasks = new ArrayList<Task>();
+//        allTasks.add(new Task("task 1","do the lab","new"));
+//        allTasks.add(new Task("task 2","finish the reading","assigned"));
+//        allTasks.add(new Task("task 3","hanging out ","in progress"));
+//        allTasks.add(new Task("task 4","Play video games","in progress"));
+//        allTasks.add(new Task("task 5","do some resubmissions","complete"));
+        AppDatabase appDatabase;
+        appDatabase= Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"tasks").allowMainThreadQueries().build();
+        TaskDao taskDao=appDatabase.taskDao();
+        List<Task> allTasks=taskDao.getAll();
         RecyclerView allTasksRecycleView = findViewById(R.id.TaskListRecyclerView);
         allTasksRecycleView.setLayoutManager(new LinearLayoutManager(this));
         allTasksRecycleView.setAdapter(new TaskAdapter(allTasks));
@@ -39,14 +45,14 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(renderAllTasksActivity);
 //            }
 //        });
-//        Button addTaskButton = findViewById(R.id.addTask);
-//        addTaskButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View V) {
-//                Intent renderAllTasksActivity = new Intent(MainActivity.this, AddTask.class);
-//                startActivity(renderAllTasksActivity);
-//            }
-//        });
+        Button addTaskButton = findViewById(R.id.addTask);
+        addTaskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View V) {
+                Intent renderAllTasksActivity = new Intent(MainActivity.this, AddTask.class);
+                startActivity(renderAllTasksActivity);
+            }
+        });
 //        Button task2Btn = findViewById(R.id.Task2Btn);
 //        task2Btn.setOnClickListener((view -> {
 //            String taskTitle = task2Btn.getText().toString();
